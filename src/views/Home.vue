@@ -24,7 +24,7 @@
           </template>
         </v-select>
       </div>
-      <div class="border-t border-b border-blue mb-88 flex flex-col items-center py-32 px-8">
+      <div v-if="sortedDate.length > 0" class="border-t border-b border-blue mb-88 flex flex-col items-center py-32 px-8">
         <div class="text-white text-2xl mb-16 text-center">
           <div class="mb-4">最新增加</div>
           <div class="text-xs text-blue"><i class="owl-circle-clock-o"></i>{{ sortedDate[0].date }}</div>
@@ -47,7 +47,7 @@
       <div class="text-center">
         <div class="text-2xl text-blue font-bold mb-16">歷史記錄</div>
         <template v-for="(item, index) in sortedDate">
-          <div class="mb-8" :key="item.date">
+          <div class="mb-8" :key="index">
             <div class="text-sm text-blue-light ml-4 mb-4"><i class="owl-circle-clock-o"></i>{{ item.date }}</div>
             <div class="border border-1 border-blue rounded-sm p-16 mb-16 inline-block">
               <div class="flex text-center">
@@ -135,7 +135,7 @@ export default {
       }
     },
     getData: function (country) {
-      console.log('getData')
+      // console.log('getData')
       this.getByCountry(country).then(res => {
         this.data = res
       })
@@ -151,7 +151,7 @@ export default {
   watch: {
     selectedCountry: {
       handler: function (val) {
-        console.log(val)
+        // console.log(val)
         this.getData(val.alpha3Code)
       },
       deep: true
