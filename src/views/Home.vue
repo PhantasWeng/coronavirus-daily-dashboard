@@ -3,7 +3,7 @@
     <div class="container">
       <div class="text-center py-32 text-white">
         <div v-if="selectedCountry" class="text-4xl font-bold">{{ selectedCountry.name }} 新冠病毒 每日追蹤</div>
-        <div class="text-xs text-grey-dark">by Phantas Weng</div>
+        <div class="text-xs text-grey-dark">by <a class="text-orange" href="https://github.com/PhantasWeng/coronavirus-daily-dashboard">Phantas Weng</a></div>
       </div>
       <div class="w-full md:w-1/3 mb-32 mx-auto">
         <v-select v-model="selectedCountry" :options="countries" label="name" class="bg-white">
