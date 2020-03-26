@@ -1,5 +1,7 @@
 var owlsight = require('owlsight')
 
+const isDev = process.env.NODE_ENV === 'development'
+
 module.exports = {
   css: {
     sourceMap: isDev || true,
