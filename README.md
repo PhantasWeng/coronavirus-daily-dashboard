@@ -1,24 +1,7 @@
-# coronavirus-taiwan
+# coronavirus-daily-dashboard
 
-## Project setup
-```
-yarn install
-```
+簡易新冠病毒 各國每日數據
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+包含 `確診` `死亡` `治癒`
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[Phantas.tw]("http://phantas.tw/")
