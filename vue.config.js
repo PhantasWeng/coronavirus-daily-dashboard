@@ -20,6 +20,14 @@ module.exports = {
       }
     }
   },
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      template: 'public/index.html',
+      filename: 'index.html',
+      title: '新冠病毒 每日追蹤',
+    }
+  },
   devServer: {
     port: 8865,
     disableHostCheck: true
