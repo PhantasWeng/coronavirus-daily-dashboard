@@ -5,6 +5,6 @@
 </template>
 
 <style lang="sass">
-.home
+html, body
   @apply bg-blue-darkest
 </style>
