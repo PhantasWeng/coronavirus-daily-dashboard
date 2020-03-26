@@ -32,9 +32,6 @@ export default new Vuex.Store({
     getByCountry: function ({ commit, state }, country = 'TWN') {
       return request({
         url: `country/${country}`,
-        headers: {
-          'Cache-Control': 'no-cache'
-        },
         method: 'get'
       })
     }
