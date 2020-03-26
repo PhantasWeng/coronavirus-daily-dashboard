@@ -5,7 +5,7 @@
   "license": "ISC",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && push-dir --dir=dist --branch=gh-pages --force",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
