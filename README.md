@@ -4,4 +4,4 @@
 
 包含 `確診` `死亡` `治癒`
 
-[Phantas.tw]("http://phantas.tw/")
+[Phantas.tw](http://phantas.tw/)
