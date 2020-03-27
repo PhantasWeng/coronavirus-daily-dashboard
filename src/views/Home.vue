@@ -2,24 +2,37 @@
   <div class="home">
     <div class="container">
       <div class="text-center py-32 text-white">
-        <div v-if="selectedCountry" class="text-4xl font-bold">{{ selectedCountry.name }} 新冠病毒 每日追蹤</div>
-        <div class="text-xs text-grey-dark">by <a class="text-orange" href="https://github.com/PhantasWeng/coronavirus-daily-dashboard">Phantas Weng</a></div>
+        <div v-if="selectedCountry" class="text-4xl font-bold flex items-end justify-center">
+          <div class="flex flex-col items-center mr-8">
+            <!-- <div v-show="selectedCountry.flag" class="text-xs text-grey-dark ml-4 flex items-center bg-white py-4 px-8 rounded-sm">
+              <img :src="selectedCountry.flag" :alt="`flag-${selectedCountry.name}`" class="w-4 mr-4 block">
+              <div>{{ selectedCountry.name }}</div>
+            </div> -->
+            <div class="mt-8">{{ selectedCountry.nativeName }}</div>
+          </div>
+          <div>新冠病毒 每日追蹤</div>
+        </div>
+        <div class="text-xs text-grey-dark mt-8"><a class="text-orange flex items-center justify-center" href="https://github.com/PhantasWeng/coronavirus-daily-dashboard"><img :src="githubIcon" class="w-4 mr-8" /><span>Phantas Weng</span></a></div>
       </div>
       <div class="w-full md:w-1/3 mb-32 mx-auto">
-        <v-select v-model="selectedCountry" :options="countries" label="name" class="bg-white">
-          <template #selected-option="{ name, nativeName, }">
+        <v-select v-model="selectedCountry" :options="countries" label="name" :filterBy="filterBy" class="bg-white">
+          <template #selected-option="{ name, nativeName, flag }">
             <div class="flex-1 flex items-center">
-              <div class="font-bold mr-16">{{ name }}</div>
-              <div class="text-sm text-grey-darker">{{ nativeName }}</div>
+              <div v-show="flag" class="w-4 mr-4">
+                <img :src="flag" :alt="`flag-${name}`" class="w-full">
+              </div>
+              <!-- <div class="font-bold mr-16">{{ name }}</div> -->
+              <div class="text-sm text-grey-darker mr-8">{{ nativeName }}</div>
+              <div class="text-xs text-grey-darker"> - {{ name }}</div>
             </div>
           </template>
           <template v-slot:option="option">
             <div class="flex">
               <div class="flex-1 flex">
-                <div class="font-bold mr-16">{{ option.name }}</div>
-                <div class="text-sm text-grey-darker">{{ option.nativeName }}</div>
+                <div class="nativeName font-bold mr-8">{{ option.nativeName }}</div>
+                <div class="name text-sm text-grey-darker">- {{ option.name }}</div>
               </div>
-              <div class="flex-1 text-grey-dark">{{ option.alpha3Code }}</div>
+              <!-- <div class="flex-1 text-grey-dark">{{ option.alpha3Code }}</div> -->
             </div>
           </template>
         </v-select>
@@ -139,6 +152,7 @@ import _ from 'lodash'
 import dayjs from 'dayjs'
 import { mapActions, mapGetters } from 'vuex'
 import LineChart from '@/views/chartTemplate/lineChart'
+import githubIcon from '@/assets/GitHub-Mark-Light-32px.png'
 export default {
   name: 'Home',
   components: {
@@ -146,6 +160,7 @@ export default {
   },
   data () {
     return {
+      githubIcon: githubIcon,
       selectedCountry: {},
       data: [],
       dataCollection: null,
@@ -257,6 +272,10 @@ export default {
       getCountriesList: 'getCountriesList',
       getByCountry: 'getByCountry'
     }),
+    filterBy: function (option, label, search) {
+      console.log('val', option.nativeName, label, search)
+      return (option.alpha2Code + option.alpha3Code + option.nativeName + label).toLowerCase().indexOf(search.replace('台', '臺').toLowerCase()) > -1
+    },
     additionCount: function (index, type) {
       if (this.sortedDate[index] && this.sortedDate[index + 1]) {
         return this.sortedDate[index].data[type] - this.sortedDate[index + 1].data[type]
@@ -338,4 +357,8 @@ export default {
 </script>
 
 <style lang="sass">
+.vs__dropdown-option.vs__dropdown-option--highlight
+  @apply bg-blue
+  .name, .nativeName
+    @apply text-white
 </style>
