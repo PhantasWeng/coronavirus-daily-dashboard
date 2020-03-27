@@ -2,7 +2,7 @@
   <div class="home">
     <div class="container">
       <div class="text-center py-32 text-white">
-        <div v-if="selectedCountry" class="text-4xl font-bold flex items-end justify-center">
+        <div v-if="selectedCountry" class="text-4xl font-bold flex flex-wrap items-end justify-center">
           <div class="flex flex-col items-center mr-8">
             <!-- <div v-show="selectedCountry.flag" class="text-xs text-grey-dark ml-4 flex items-center bg-white py-4 px-8 rounded-sm">
               <img :src="selectedCountry.flag" :alt="`flag-${selectedCountry.name}`" class="w-4 mr-4 block">
