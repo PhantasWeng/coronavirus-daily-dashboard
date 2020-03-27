@@ -85,50 +85,50 @@
           </div>
         </div>
       </div>
-      <div class="text-center">
+      <div>
         <div class="text-2xl text-blue font-bold mb-16">歷史記錄</div>
-        <template v-for="(item, index) in sortedDate">
-          <div class="mb-8" :key="index">
-            <div class="text-sm text-blue-light ml-4 mb-4"><i class="owl-circle-clock-o"></i>{{ item.date }}</div>
-            <div class="border border-1 border-blue rounded-sm p-16 mb-16 inline-block">
-              <div class="flex text-center">
-                <div class="flex flex-col items-center mr-32 text-blue-light">
-                  <div class="font-bold capitalize flex flex-col items-center mb-8">
-                    <div class="mb-8">累計確診</div>
-                    <div class="font-bold text-xs text-blue-dark">confirmed</div>
+        <LineChart class="flex-auto" :chart-data="dataCollection" :options="chartOptions"></LineChart>
+        <div class="text-center mt-88">
+          <template v-for="(item, index) in sortedDate">
+            <div class="mb-8" :key="index">
+              <div class="text-sm text-blue-light ml-4 mb-4"><i class="owl-circle-clock-o"></i>{{ item.date }}</div>
+              <div class="border border-1 border-blue rounded-sm p-16 mb-16 inline-block">
+                <div class="flex text-center">
+                  <div class="flex flex-col items-center mr-32 text-blue-light">
+                    <div class="font-bold capitalize flex flex-col items-center mb-8">
+                      <div class="mb-8">累計確診</div>
+                      <div class="font-bold text-xs text-blue-dark">confirmed</div>
+                    </div>
+                    <div class="h-8 flex items-center">
+                      <span class="text-2xl">{{ item.data.confirmed }}</span>
+                      <span v-if="additionCount(index, 'confirmed') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'confirmed')}})</span>
+                    </div>
                   </div>
-                  <div class="h-8 flex items-center">
-                    <span v-if="item.data.confirmed > 0" class="text-2xl">{{ item.data.confirmed }}</span>
-                    <span v-else><i class="text-sm owl-load"></i></span>
-                    <span v-if="additionCount(index, 'confirmed') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'confirmed')}})</span>
+                  <div class="flex flex-col items-center mr-32 text-orange">
+                    <div class="font-bold capitalize flex flex-col items-center mb-8">
+                      <div class="mb-8">累計死亡</div>
+                      <div class="font-bold text-xs text-blue-dark">deaths</div>
+                    </div>
+                    <div class="h-8 flex items-center">
+                      <span class="text-2xl">{{ item.data.deaths }}</span>
+                      <span v-if="additionCount(index, 'deaths') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'deaths')}})</span>
+                    </div>
                   </div>
-                </div>
-                <div class="flex flex-col items-center mr-32 text-orange">
-                  <div class="font-bold capitalize flex flex-col items-center mb-8">
-                    <div class="mb-8">累計死亡</div>
-                    <div class="font-bold text-xs text-blue-dark">deaths</div>
-                  </div>
-                  <div class="h-8 flex items-center">
-                    <span v-if="item.data.deaths > 0" class="text-2xl">{{ item.data.deaths }}</span>
-                    <span v-else><i class="text-sm owl-load"></i></span>
-                    <span v-if="additionCount(index, 'deaths') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'deaths')}})</span>
-                  </div>
-                </div>
-                <div class="flex flex-col items-center text-green">
-                  <div class="font-bold capitalize flex flex-col items-center mb-8">
-                    <div class="mb-8">累計治癒</div>
-                    <div class="font-bold text-xs text-blue-dark">recovered</div>
-                  </div>
-                  <div class="h-8 flex items-center">
-                    <span v-if="item.data.recovered > 0" class="text-2xl">{{ item.data.recovered }}</span>
-                    <span v-else><i class="text-sm owl-load"></i></span>
-                    <span v-if="additionCount(index, 'recovered') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'recovered')}})</span>
+                  <div class="flex flex-col items-center text-green">
+                    <div class="font-bold capitalize flex flex-col items-center mb-8">
+                      <div class="mb-8">累計治癒</div>
+                      <div class="font-bold text-xs text-blue-dark">recovered</div>
+                    </div>
+                    <div class="h-8 flex items-center">
+                      <span class="text-2xl">{{ item.data.recovered }}</span>
+                      <span v-if="additionCount(index, 'recovered') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'recovered')}})</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -136,19 +136,103 @@
 
 <script>
 import _ from 'lodash'
+import dayjs from 'dayjs'
 import { mapActions, mapGetters } from 'vuex'
+import LineChart from '@/views/chartTemplate/lineChart'
 export default {
   name: 'Home',
+  components: {
+    LineChart
+  },
   data () {
     return {
       selectedCountry: {},
-      data: []
+      data: [],
+      dataCollection: null,
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+          }
+        },
+        legend: {
+          // display: false
+          labels: {
+            usePointStyle: true,
+            boxWidth: 4,
+            fontColor: '#3ab3e2'
+          }
+        },
+        title: {
+          display: false
+        },
+        hover: {
+          intersect: false
+        },
+        tooltips: {
+          mode: 'point'
+        },
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: false
+              },
+              display: false
+            }
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                color: '#07689f',
+                drawBorder: false
+              },
+              ticks: {
+                fontColor: '#3ab3e2'
+              }
+            }
+          ]
+        }
+      }
     }
   },
   computed: {
     ...mapGetters({
       countries: 'countries'
     }),
+    dates: function () {
+      const result = []
+      _.each(this.data.result, (date, key) => {
+        result.push(dayjs(key).format('YYYY-MM-DD'))
+      })
+      return result
+    },
+    confirmed: function () {
+      const result = []
+      _.each(this.data.result, date => {
+        result.push(date.confirmed)
+      })
+      return result
+    },
+    deaths: function () {
+      const result = []
+      _.each(this.data.result, date => {
+        result.push(date.deaths)
+      })
+      return result
+    },
+    recovered: function () {
+      const result = []
+      _.each(this.data.result, date => {
+        result.push(date.recovered)
+      })
+      return result
+    },
     sortedDate: function () {
       const reMap = _.map(this.data.result, (data, date) => {
         return {
@@ -183,6 +267,49 @@ export default {
       this.getByCountry(country).then(res => {
         this.data = res
       })
+    },
+    getRandomInt () {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    },
+    fillData: function () {
+      this.dataCollection = {
+        labels: this.dates,
+        datasets: [
+          {
+            label: '確診',
+            borderColor: '#078abc',
+            data: this.confirmed,
+            pointHoverBackgroundColor: '#078abc',
+            borderJoinStyle: 'round',
+            pointRadius: 2,
+            pointHoverRadius: 4,
+            pointBorderWidth: 0,
+            fill: false
+          },
+          {
+            label: '死亡',
+            borderColor: '#f7ac15',
+            data: this.deaths,
+            pointHoverBackgroundColor: '#f7ac15',
+            borderJoinStyle: 'round',
+            pointRadius: 2,
+            pointHoverRadius: 4,
+            pointBorderWidth: 0,
+            fill: false
+          },
+          {
+            label: '治癒',
+            borderColor: '#8fc112',
+            data: this.recovered,
+            pointHoverBackgroundColor: '#8fc112',
+            borderJoinStyle: 'round',
+            pointRadius: 2,
+            pointHoverRadius: 4,
+            pointBorderWidth: 0,
+            fill: false
+          }
+        ]
+      }
     }
   },
   created () {
@@ -197,6 +324,12 @@ export default {
       handler: function (val) {
         // console.log(val)
         this.getData(val.alpha3Code)
+      },
+      deep: true
+    },
+    sortedDate: {
+      handler: function (val) {
+        this.fillData()
       },
       deep: true
     }
