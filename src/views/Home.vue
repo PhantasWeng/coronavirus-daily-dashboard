@@ -24,7 +24,7 @@
           </template>
         </v-select>
       </div>
-      <div v-if="sortedDate.length > 0" class="border-t border-b border-blue mb-88 flex flex-col items-center py-32 px-8">
+      <div v-if="sortedDate.length > 0" class="border-t border-blue mb-0 flex flex-col items-center py-32 px-8">
         <div class="text-sm text-blue mb-24 "><i class="owl-circle-clock-o"></i>更新至: {{ sortedDate[0].date }}</div>
         <div class="flex flex-col md:flex-row items-center justify-center">
           <div class="flex-grow flex-shrink border border-blue rounded-sm flex flex-col items-center py-16 px-16 mb-32 md:mb-0 md:mx-8">
@@ -85,10 +85,10 @@
           </div>
         </div>
       </div>
-      <div>
-        <div class="text-2xl text-blue font-bold mb-16">歷史記錄</div>
-        <LineChart class="flex-auto" :chart-data="dataCollection" :options="chartOptions"></LineChart>
-        <div class="text-center mt-88">
+      <LineChart class="mt-24 flex-auto" :chart-data="dataCollection" :options="chartOptions"></LineChart>
+      <div class="border-t border-blue pt-88 mt-88">
+        <div class="text-center">
+          <div class="text-2xl text-blue font-bold mb-16">歷史記錄</div>
           <template v-for="(item, index) in sortedDate">
             <div class="mb-8" :key="index">
               <div class="text-sm text-blue-light ml-4 mb-4"><i class="owl-circle-clock-o"></i>{{ item.date }}</div>
