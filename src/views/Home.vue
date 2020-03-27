@@ -25,22 +25,63 @@
         </v-select>
       </div>
       <div v-if="sortedDate.length > 0" class="border-t border-b border-blue mb-88 flex flex-col items-center py-32 px-8">
-        <div class="text-white text-2xl mb-16 text-center">
-          <div class="mb-4">最新增加</div>
-          <div class="text-xs text-blue"><i class="owl-circle-clock-o"></i>{{ sortedDate[0].date }}</div>
-        </div>
-        <div class="flex text-center">
-          <div class="mr-8">
-            <div class="mb-4 text-xl text-blue">確診</div>
-            <div class="p-8 text-white bg-blue rounded-sm text-4xl text-center">{{ additionCount(0, 'confirmed') }}</div>
+        <div class="text-sm text-blue mb-24 "><i class="owl-circle-clock-o"></i>更新至: {{ sortedDate[0].date }}</div>
+        <div class="flex flex-col md:flex-row items-center justify-center">
+          <div class="flex-grow flex-shrink border border-blue rounded-sm flex flex-col items-center py-16 px-16 mb-32 md:mb-0 md:mx-8">
+            <div class="text-white text-lg mb-8 text-center">
+              <div class="mb-4">最新增加</div>
+            </div>
+            <div class="flex text-center">
+              <div class="mr-8">
+                <div class="mb-4 text-lg text-blue mb-8">確診</div>
+                <div class="p-8 text-white bg-blue rounded-sm text-4xl text-center h-16 flex items-center justify-center">
+                  <template v-if="additionCount(0, 'confirmed') > -1">{{ additionCount(0, 'confirmed') }}</template>
+                  <template v-else><i class="text-sm owl-load"></i></template>
+                </div>
+              </div>
+              <div class="mr-8">
+                <div class="mb-4 text-lg text-blue mb-8">死亡</div>
+                <div class="p-8 text-white bg-orange rounded-sm text-4xl text-center h-16 flex items-center justify-center">
+                  <template v-if="additionCount(0, 'deaths') > -1">{{ additionCount(0, 'deaths') }}</template>
+                  <template v-else><i class="text-sm owl-load"></i></template>
+                </div>
+              </div>
+              <div>
+                <div class="mb-4 text-lg text-blue mb-8">治癒</div>
+                <div class="p-8 text-white bg-green-dark rounded-sm text-4xl text-center h-16 flex items-center justify-center">
+                  <template v-if="additionCount(0, 'recovered') > -1">{{ additionCount(0, 'recovered') }}</template>
+                  <template v-else><i class="text-sm owl-load"></i></template>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="mr-8">
-            <div class="mb-4 text-xl text-blue">死亡</div>
-            <div class="p-8 text-white bg-orange rounded-sm text-4xl text-center">{{ additionCount(0, 'deaths') }}</div>
-          </div>
-          <div class="mr-8">
-            <div class="mb-4 text-xl text-blue">治癒</div>
-            <div class="p-8 text-white bg-green-dark rounded-sm text-4xl text-center">{{ additionCount(0, 'recovered') }}</div>
+          <div class="flex-grow flex-shrink border border-blue-darker rounded-sm flex flex-col items-center py-16 px-16 md:mx-8">
+            <div class="text-white text-lg mb-8 text-center">
+              <div class="mb-4">累計</div>
+            </div>
+            <div class="flex text-center">
+              <div class="mr-8">
+                <div class="mb-4 text-lg text-blue mb-8">確診</div>
+                <div class="p-8 text-white bg-blue rounded-sm text-4xl text-center h-16 flex items-center justify-center">
+                  <template v-if="sortedDate[0].data.confirmed > 0">{{ sortedDate[0].data.confirmed }}</template>
+                  <template v-else><i class="text-sm owl-load"></i></template>
+                </div>
+              </div>
+              <div class="mr-8">
+                <div class="mb-4 text-lg text-blue mb-8">死亡</div>
+                <div class="p-8 text-white bg-orange rounded-sm text-4xl text-center h-16 flex items-center justify-center">
+                  <template v-if="sortedDate[0].data.deaths > 0">{{ sortedDate[0].data.deaths }}</template>
+                  <template v-else><i class="text-sm owl-load"></i></template>
+                </div>
+              </div>
+              <div>
+                <div class="mb-4 text-lg text-blue mb-8">治癒</div>
+                <div class="p-8 text-white bg-green-dark rounded-sm text-4xl text-center h-16 flex items-center justify-center">
+                  <template v-if="sortedDate[0].data.recovered > 0">{{ sortedDate[0].data.recovered }}</template>
+                  <template v-else><i class="text-sm owl-load"></i></template>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -56,9 +97,10 @@
                     <div class="mb-8">累計確診</div>
                     <div class="font-bold text-xs text-blue-dark">confirmed</div>
                   </div>
-                  <div>
-                    <span class="text-2xl">{{ item.data.confirmed }}</span>
-                    <span v-if="additionCount(index, 'confirmed') > 0" class="text-xs font-bold text-red pl-4">(+{{ additionCount(index, 'confirmed')}})</span>
+                  <div class="h-8 flex items-center">
+                    <span v-if="item.data.confirmed > 0" class="text-2xl">{{ item.data.confirmed }}</span>
+                    <span v-else><i class="text-sm owl-load"></i></span>
+                    <span v-if="additionCount(index, 'confirmed') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'confirmed')}})</span>
                   </div>
                 </div>
                 <div class="flex flex-col items-center mr-32 text-orange">
@@ -66,9 +108,10 @@
                     <div class="mb-8">累計死亡</div>
                     <div class="font-bold text-xs text-blue-dark">deaths</div>
                   </div>
-                  <div>
-                    <span class="text-2xl">{{ item.data.deaths }}</span>
-                    <span v-if="additionCount(index, 'deaths') > 0" class="text-xs font-bold text-red pl-4">(+{{ additionCount(index, 'deaths')}})</span>
+                  <div class="h-8 flex items-center">
+                    <span v-if="item.data.deaths > 0" class="text-2xl">{{ item.data.deaths }}</span>
+                    <span v-else><i class="text-sm owl-load"></i></span>
+                    <span v-if="additionCount(index, 'deaths') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'deaths')}})</span>
                   </div>
                 </div>
                 <div class="flex flex-col items-center text-green">
@@ -76,9 +119,10 @@
                     <div class="mb-8">累計治癒</div>
                     <div class="font-bold text-xs text-blue-dark">recovered</div>
                   </div>
-                  <div>
-                    <span class="text-2xl">{{ item.data.recovered }}</span>
-                    <span v-if="additionCount(index, 'recovered') > 0" class="text-xs font-bold text-red pl-4">(+{{ additionCount(index, 'recovered')}})</span>
+                  <div class="h-8 flex items-center">
+                    <span v-if="item.data.recovered > 0" class="text-2xl">{{ item.data.recovered }}</span>
+                    <span v-else><i class="text-sm owl-load"></i></span>
+                    <span v-if="additionCount(index, 'recovered') > 0" class="self-end leading-md text-xs font-bold text-red ml-8">(+{{ additionCount(index, 'recovered')}})</span>
                   </div>
                 </div>
               </div>
