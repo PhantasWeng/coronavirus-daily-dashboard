@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import request from '@/utils/request'
+import dayjs from 'dayjs'
 // import _ from 'lodash'
 
 Vue.use(Vuex)
@@ -31,7 +32,10 @@ export default new Vuex.Store({
     },
     getByCountry: function ({ commit, state }, country = 'TWN') {
       return request({
-        url: `country/${country}`,
+        url: `country/${country}?${dayjs().format('YYYY-MM-DD-mm-ss')}`,
+        headers: {
+          'Cache-Control': 'no-cache'
+        },
         method: 'get'
       })
     }
