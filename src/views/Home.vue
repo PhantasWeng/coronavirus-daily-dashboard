@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <OwltingNav></OwltingNav>
-    <div class="container">
+    <div class="container pb-88">
       <div class="text-center py-32 text-white">
         <div v-if="selectedCountry" class="text-4xl font-bold flex flex-wrap items-end justify-center">
           <div class="flex flex-col items-center mr-8">
