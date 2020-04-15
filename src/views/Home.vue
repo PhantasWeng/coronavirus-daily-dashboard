@@ -28,7 +28,7 @@
         <div class="text-xs text-grey-dark mt-8"><a class="text-orange flex items-center justify-center" href="https://github.com/PhantasWeng/coronavirus-daily-dashboard"><img :src="githubIcon" class="w-4 mr-8" /><span>Phantas Weng</span></a></div>
       </div>
       <div class="w-full md:w-1/3 mb-32 mx-auto">
-        <v-select v-model="selectedCountry" :options="countries" :clearable="false" label="name" :filterBy="filterBy" class="bg-white">
+        <v-select v-model="selectedCountry" :options="countries" :clearable="false" label="Country" :filterBy="filterBy" class="bg-white">
           <template #selected-option="{ name, nativeName, flag }">
             <div class="flex-1 flex items-center">
               <div v-show="flag" class="w-4 mr-4">
