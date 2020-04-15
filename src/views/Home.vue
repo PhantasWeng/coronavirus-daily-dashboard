@@ -37,7 +37,23 @@
           </template>
         </v-select>
       </div>
-      <div v-if="sortedDate.length > 0" class="border-t border-blue mb-0 flex flex-col items-center py-32 px-8">
+      <div v-if="isLoading" style="text-align: center; margin: 80px;">
+        <div class="loading-spinner-double-ring">
+          <div class="spinner">
+            <div></div>
+            <div></div>
+            <div><div></div></div>
+            <div><div></div></div>
+          </div>
+        </div>
+        <div style="color: #fff;">LOADING</div>
+      </div>
+      <div v-if="errMsg" class="text-white text-center my-88">
+        <template v-if="errMsg === 404">
+          <div class="text-2xl">沒有資料</div>
+        </template>
+      </div>
+      <div v-if="sortedDate.length > 0 && isResult" class="border-t border-blue mb-0 flex flex-col items-center py-32 px-8">
         <div class="text-sm text-blue mb-24 "><i class="owl-circle-clock-o"></i>更新至: {{ sortedDate[0].date }}</div>
         <div class="flex flex-col md:flex-row items-center justify-center">
           <div class="flex-grow flex-shrink border border-blue rounded-sm flex flex-col items-center py-16 px-16 mb-32 md:mb-0 md:mx-8">
@@ -98,8 +114,8 @@
           </div>
         </div>
       </div>
-      <LineChart class="mt-24 flex-auto" :chart-data="dataCollection" :options="chartOptions"></LineChart>
-      <div class="border-t border-blue pt-88 mt-88">
+      <LineChart v-show="isResult" class="mt-24 flex-auto" :chart-data="dataCollection" :options="chartOptions"></LineChart>
+      <div v-if="isResult" class="border-t border-blue pt-88 mt-88">
         <div class="text-center">
           <div class="text-2xl text-blue font-bold mb-16">歷史記錄</div>
           <template v-for="(item, index) in sortedDate">
@@ -162,6 +178,8 @@ export default {
     return {
       githubIcon: githubIcon,
       selectedCountry: {},
+      errMSG: null,
+      isLoading: true,
       data: [],
       dataCollection: null,
       chartOptions: {
@@ -220,6 +238,9 @@ export default {
     ...mapGetters({
       countries: 'countries'
     }),
+    isResult: function () {
+      return !this.isLoading && !this.errMsg
+    },
     dates: function () {
       const result = []
       _.each(this.data.result, (date, key) => {
@@ -283,8 +304,18 @@ export default {
     },
     getData: function (country) {
       // console.log('getData')
+      this.isLoading = true
       this.getByCountry(country).then(res => {
+        this.errMSG = null
         this.data = res
+      }).catch((err) => {
+        if (err) {
+          if (err.response.status) {
+            this.errMsg = err.response.status
+          }
+        }
+      }).finally(res => {
+        this.isLoading = false
       })
     },
     getRandomInt () {
@@ -361,4 +392,101 @@ export default {
   @apply bg-blue
   .name, .nativeName
     @apply text-white
+</style>
+
+<style>
+@keyframes spinner {
+  0% { transform: rotate(0) }
+  100% { transform: rotate(360deg) }
+}
+.spinner div { box-sizing: border-box!important }
+.spinner > div {
+  position: absolute;
+  width: 166px;
+  height: 166px;
+  top: 17px;
+  left: 17px;
+  border-radius: 50%;
+  border: 6px solid #000;
+  border-color: #1d3f72 transparent #1d3f72 transparent;
+  animation: spinner 2.0833333333333335s linear infinite;
+}
+
+.spinner > div:nth-child(2), .spinner > div:nth-child(4) {
+  width: 150px;
+  height: 150px;
+  top: 25px;
+  left: 25px;
+  animation: spinner 2.0833333333333335s linear infinite reverse;
+}
+.spinner > div:nth-child(2) {
+  border-color: transparent #5699d2 transparent #5699d2
+}
+.spinner > div:nth-child(3) { border-color: transparent }
+.spinner > div:nth-child(3) div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(45deg);
+}
+.spinner > div:nth-child(3) div:before, .spinner > div:nth-child(3) div:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  top: -6px;
+  left: 74px;
+  background: #1d3f72;
+  border-radius: 50%;
+  box-shadow: 0 160px 0 0 #1d3f72;
+}
+.spinner > div:nth-child(3) div:after {
+  left: -6px;
+  top: 74px;
+  box-shadow: 160px 0 0 0 #1d3f72;
+}
+
+.spinner > div:nth-child(4) { border-color: transparent; }
+.spinner > div:nth-child(4) div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(45deg);
+}
+.spinner > div:nth-child(4) div:before, .spinner > div:nth-child(4) div:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  top: -6px;
+  left: 66px;
+  background: #5699d2;
+  border-radius: 50%;
+  box-shadow: 0 144px 0 0 #5699d2;
+}
+.spinner > div:nth-child(4) div:after {
+  left: -6px;
+  top: 66px;
+  box-shadow: 144px 0 0 0 #5699d2;
+}
+.loading-spinner-double-ring {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  overflow: hidden;
+  background: transparent;
+  margin: 0
+}
+.spinner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.spinner div { box-sizing: content-box; }
+/* generated by https://loading.io/ */
 </style>
