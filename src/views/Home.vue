@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <div class="container">
+    <OwltingNav></OwltingNav>
+    <div class="container pb-88">
       <div class="clearfix">
         <div class="w-full md:w-1/5 float-right m-8 flex items-center">
           <span class="text-blue uppercase text-xs">language: </span>
@@ -180,11 +181,15 @@
 import _ from 'lodash'
 import dayjs from 'dayjs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+
+import OwltingNav from '@/components/OwltingNav'
 import LineChart from '@/views/chartTemplate/lineChart'
 import githubIcon from '@/assets/GitHub-Mark-Light-32px.png'
+
 export default {
   name: 'Home',
   components: {
+    OwltingNav,
     LineChart
   },
   data () {
