@@ -2,20 +2,42 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import request from '@/utils/request'
 import dayjs from 'dayjs'
-// import _ from 'lodash'
+import i18n from '@/i18n'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    countries: []
+    countries: [],
+    langs: [
+      {
+        name: 'English',
+        key: 'en-US'
+      },
+      {
+        name: '繁體中文',
+        key: 'zh-TW'
+      }
+    ]
   },
   getters: {
+    langs: (state) => {
+      return {
+        list: state.langs,
+        selectedLang: _.find(state.langs, lang => {
+          return lang.key === i18n.locale
+        })
+      }
+    },
     countries: (state) => {
       return state.countries
     }
   },
   mutations: {
+    SET_LANGUAGE: function (state, payload) {
+      i18n.locale = payload.key
+    },
     SET_COUNTRIES: function (state, payload) {
       state.countries = payload
     }

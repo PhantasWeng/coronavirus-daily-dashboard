@@ -1,0 +1,14 @@
+{
+  "loading": "讀取中",
+  "noData": "沒有資料",
+  "covid-19": "新冠病毒",
+  "dailyTracking": "每日追蹤",
+  "latestUpdate": "更新至",
+  "latest": "最新",
+  "increase": "增加",
+  "confirmed": "確診",
+  "death": "死亡",
+  "recovered": "治癒",
+  "cumulative": "累計",
+  "historyRecord": "歷史記錄"
+}

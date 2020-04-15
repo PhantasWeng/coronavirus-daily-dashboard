@@ -1,0 +1,14 @@
+{
+  "loading": "Loading",
+  "noData": "No Data",
+  "covid-19": "COVID-19",
+  "dailyTracking": "Daily Tracking",
+  "latestUpdate": "Latest Update",
+  "latest": "Latest",
+  "increase": "Increase",
+  "confirmed": "Confirmed",
+  "death": "Death",
+  "recovered": "Recovered",
+  "cumulative": "Cumulative Total",
+  "historyRecord": "History Record"
+}
